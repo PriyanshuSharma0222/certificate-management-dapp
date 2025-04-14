@@ -44,6 +44,8 @@ import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import RequestForm from "components/RequestForm.js";
+import AadhaarViewer from "components/Response.js";
 
 import UserProfile from "layouts/user-profile";
 import UserManagement from "layouts/user-management";
@@ -57,6 +59,22 @@ import ResetPassword from "auth/reset-password";
 import Icon from "@mui/material/Icon";
 
 const routes = [
+  {
+    type: "collapse",
+    name: "Aadhaar Req",
+    key: "request",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/request",
+    component: <RequestForm />,
+  },
+  {
+    type: "collapse",
+    name: "Aadhaar Display",
+    key: "display",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/response",
+    component: <AadhaarViewer />,
+  },
   {
     type: "collapse",
     name: "Dashboard",
@@ -168,7 +186,7 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/auth/reset-password",
     component: <ResetPassword />,
-  },
+  }
 ];
 
 export default routes;
