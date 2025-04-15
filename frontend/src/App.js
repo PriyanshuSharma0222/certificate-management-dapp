@@ -48,6 +48,8 @@ import { AuthContext } from "context";
 import UserProfile from "layouts/user-profile";
 import UserManagement from "layouts/user-management";
 import { Helmet } from "react-helmet";
+import RequestForm from "components/RequestForm";
+import AdminLogin from "auth/admin-login";
 
 export default function App() {
   const authContext = useContext(AuthContext);
@@ -229,31 +231,6 @@ export default function App() {
       )}
       {direction === "rtl" ? (
         <CacheProvider value={rtlCache}>
-          <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
-            <CssBaseline />
-            {layout === "dashboard" && (
-              <>
-                <Sidenav
-                  color={sidenavColor}
-                  brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-                  brandName="Material Dashboard 2"
-                  routes={routes}
-                  onMouseEnter={handleOnMouseEnter}
-                  onMouseLeave={handleOnMouseLeave}
-                />
-                <Configurator />
-                {configsButton}
-              </>
-            )}
-            {layout === "vr" && <Configurator />}
-            <Routes>
-              <Route path="login" element={<Navigate to="/auth/login" />} />
-              <Route path="register" element={<Navigate to="/auth/register" />} />
-              <Route path="forgot-password" element={<Navigate to="/auth/forgot-password" />} />
-              {getRoutes(routes)}
-              <Route path="*" element={<Navigate to="/dashboard" />} />
-            </Routes>
-          </ThemeProvider>
         </CacheProvider>
       ) : (
         <ThemeProvider theme={darkMode ? themeDark : theme}>
@@ -275,9 +252,11 @@ export default function App() {
           {layout === "vr" && <Configurator />}
           <Routes>
             <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/admin-login" element={<AdminLogin />} />
             <Route path="/auth/register" element={<Register />} />
             <Route path="/auth/forgot-password" element={<ForgotPassword />} />
             <Route path="/auth/reset-password" element={<ResetPassword />} />
+            <Route path="/form/*" element={<RequestForm />} />
             <Route
               exact
               path="user-profile"
@@ -299,7 +278,7 @@ export default function App() {
               key="user-management"
             />
             {getRoutes(routes)}
-            <Route path="*" element={<Navigate to="/dashboard" />} />
+            <Route path="*" element={<Navigate to="/auth/login" />} />
           </Routes>
         </ThemeProvider>
       )}

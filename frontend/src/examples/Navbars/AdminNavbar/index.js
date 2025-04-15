@@ -117,51 +117,28 @@ function DefaultNavbar({ transparent, light, action }) {
         </MDBox>
         {authContext.isAuthenticated && (
           <MDBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
+            <DefaultNavbarLink 
+              icon="person" 
+              name="profile" 
+              route="/profile" 
+              light={light} 
+            />
             <DefaultNavbarLink
               icon="donut_large"
-              name="dashboard"
+              name="requests"
               route="/dashboard"
               light={light}
             />
-            <DefaultNavbarLink icon="person" name="profile" route="/profile" light={light} />
             <DefaultNavbarLink
               icon="account_circle"
-              name="register"
+              name="history"
               route="/auth/register"
               light={light}
             />
             <DefaultNavbarLink
               icon="key"
-              name="user login"
+              name="logout"
               route="/auth/login"
-              light={light}
-            />
-            <DefaultNavbarLink
-              icon="key"
-              name="admin login"
-              route="/auth/admin-login"
-              light={light}
-            />
-          </MDBox>
-        )}
-        {!authContext.isAuthenticated && (
-          <MDBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
-            <DefaultNavbarLink
-              icon="account_circle"
-              name="register"
-              route="/auth/register"
-              light={light}
-            />
-            <DefaultNavbarLink
-              icon="key"
-              name="user login"
-              route="/auth/login"
-              light={light}
-            />
-            <DefaultNavbarLink
-              icon="key"
-              name="admin login"
-              route="/auth/admin-login"
               light={light}
             />
           </MDBox>

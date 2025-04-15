@@ -2,7 +2,7 @@ import lighthouse from '@lighthouse-web3/sdk';
 
 const apiKey = "af348d36.445d284e2aca4ac082983d6459006ade"
 
-export const storeAadhaarMetadata = async (aadhaarData) => {
+export const storeDocMetadata = async (aadhaarData) => {
   try {
     const blob = new Blob([JSON.stringify(aadhaarData)], { type: 'application/json' });
     const file = new File([blob], 'aadhaar.json', { type: 'application/json' });

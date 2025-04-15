@@ -29,7 +29,7 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import AuthService from "services/auth-service";
 import { AuthContext } from "context";
 
-function Login() {
+function AdminLogin() {
   const authContext = useContext(AuthContext);
 
   const [user, setUser] = useState({});
@@ -37,8 +37,8 @@ function Login() {
   const [rememberMe, setRememberMe] = useState(false);
 
   const [inputs, setInputs] = useState({
-    email: "21je0714@iitism.ac.in",
-    password: "userpass",
+    email: "admin@iitism.ac.in",
+    password: "adminpass",
   });
 
   const [errors, setErrors] = useState({
@@ -84,8 +84,8 @@ function Login() {
     };
 
     try {
-      const response = await AuthService.login(myData);
-      authContext.login(response.access_token, response.refresh_token);
+      const response = await AuthService.adminLogin(myData);
+      authContext.adminLogin(response.access_token, response.refresh_token);
     } catch (res) {
       if (res.hasOwnProperty("message")) {
         setCredentialsError(res.message);
@@ -225,4 +225,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default AdminLogin;

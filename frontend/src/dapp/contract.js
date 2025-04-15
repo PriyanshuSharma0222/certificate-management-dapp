@@ -1,5 +1,5 @@
 import { ethers, Log } from "ethers";
-import AadhaarNFT from "./abi/AadhaarNFT.json";
+import DocumentNFT from "./abi/DocumentNFT.json";
 import { CONTRACT_ADDRESS } from "./contract-address";
 
 export const getContract = async () => {
@@ -12,6 +12,6 @@ export const getContract = async () => {
   const provider = new ethers.BrowserProvider(window.ethereum);
   await provider.send("eth_requestAccounts", []);
   const signer = await provider.getSigner();
-  const contract = new ethers.Contract(CONTRACT_ADDRESS, AadhaarNFT.abi, signer);
+  const contract = new ethers.Contract(CONTRACT_ADDRESS, DocumentNFT.abi, signer);
   return contract;
 };

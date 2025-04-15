@@ -37,6 +37,7 @@ Coded by www.creative-tim.com
 
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
+import AdminDashboard from "layouts/admin-dashboard";
 import Tables from "layouts/tables";
 import Billing from "layouts/billing";
 import RTL from "layouts/rtl";
@@ -46,6 +47,7 @@ import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import RequestForm from "components/RequestForm.js";
 import AadhaarViewer from "components/Response.js";
+import RequestDocument from "components/RequestDocument.js";
 
 import UserProfile from "layouts/user-profile";
 import UserManagement from "layouts/user-management";
@@ -61,22 +63,22 @@ import Icon from "@mui/material/Icon";
 const routes = [
   {
     type: "collapse",
-    name: "Aadhaar Req",
-    key: "request",
+    name: "View Documents",
+    key: "documents",
     icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/request",
-    component: <RequestForm />,
-  },
-  {
-    type: "collapse",
-    name: "Aadhaar Display",
-    key: "display",
-    icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/response",
+    route: "/documents",
     component: <AadhaarViewer />,
   },
   {
     type: "collapse",
+    name: "Request Document",
+    key: "request",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/request",
+    component: <RequestDocument />,
+  },
+  {
+    type: "examples",
     name: "Dashboard",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
@@ -84,15 +86,23 @@ const routes = [
     component: <Dashboard />,
   },
   {
-    type: "collapse",
-    name: "Tables",
-    key: "tables",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tables",
-    component: <Tables />,
+    type: "examples",
+    name: "Admin Dashboard",
+    key: "admin-dashboard",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/admin-dashboard",
+    component: <AdminDashboard />,
   },
   {
     type: "collapse",
+    name: "Request Status",
+    key: "tables",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/request-status",
+    component: <Tables />,
+  },
+  {
+    type: "examples",
     name: "Billing",
     key: "billing",
     icon: <Icon fontSize="small">receipt_long</Icon>,
@@ -100,15 +110,7 @@ const routes = [
     component: <Billing />,
   },
   {
-    type: "collapse",
-    name: "RTL",
-    key: "rtl",
-    icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
-    route: "/rtl",
-    component: <RTL />,
-  },
-  {
-    type: "collapse",
+    type: "examples",
     name: "Notifications",
     key: "notifications",
     icon: <Icon fontSize="small">notifications</Icon>,
@@ -116,7 +118,7 @@ const routes = [
     component: <Notifications />,
   },
   {
-    type: "collapse",
+    type: "examples",
     name: "Profile",
     key: "profile",
     icon: <Icon fontSize="small">person</Icon>,
@@ -125,14 +127,6 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign In",
-    key: "sign-in",
-    icon: <Icon fontSize="small">login</Icon>,
-    route: "/authentication/sign-in",
-    component: <SignIn />,
-  },
-  {
-    type: "examples",
     name: "User Profile",
     key: "user-profile",
     icon: <Icon fontSize="small">person</Icon>,
@@ -148,7 +142,15 @@ const routes = [
     component: <UserManagement />,
   },
   {
-    type: "collapse",
+    type: "examples",
+    name: "Sign In",
+    key: "sign-in",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/authentication/sign-in",
+    component: <SignIn />,
+  },
+  {
+    type: "examples",
     name: "Sign Up",
     key: "sign-up",
     icon: <Icon fontSize="small">assignment</Icon>,

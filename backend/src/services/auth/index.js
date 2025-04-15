@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import randomToken from "random-token";
 import bcrypt from "bcrypt";
 import { userModel } from "../../schemas/user.schema.js";
+import { adminModel } from "../../schemas/admin.schema.js";
 import { passwordResetModel } from "../../schemas/passwordResets.schema.js";
 import jwt from 'jsonwebtoken';
 
@@ -45,6 +46,45 @@ export const loginRouteHandler = async (req, res, email, password) => {
       return res.status(400).json({
         errors: [{ detail: "Invalid password" }],
       });
+    }
+  }
+};
+
+export const adminLoginRouteHandler = async (req, res, email, password) => {
+  //Check If User Exists
+  let foundUser = await userModel.findOne({ email: email });
+  if (foundUser == null) {
+    return res.status(400).json({
+      errors: [{ detail: "Credentials don't match any existing user" }],
+    });
+  } else {
+    let adminid = await adminModel.findOne({userid:foundUser._id})
+    if(!adminid){
+      return res.status(400).json({
+        errors: [{ detail: "User is not an admin" }],
+      });
+    } else {
+      const validPassword = await bcrypt.compare(password, foundUser.password);
+      if (validPassword) {
+        // Generate JWT token
+        const token = jwt.sign(
+          { id: foundUser.id, email: foundUser.email },
+          "token",
+          {
+            expiresIn: "24h",
+          }
+        );
+        return res.json({
+          token_type: "Bearer",
+          expires_in: "24h",
+          access_token: token,
+          refresh_token: token,
+        });
+      } else {
+        return res.status(400).json({
+          errors: [{ detail: "Invalid password" }],
+        });
+      }
     }
   }
 };

@@ -2,6 +2,7 @@ import express from "express";
 import {
   forgotPasswordRouteHandler,
   loginRouteHandler,
+  adminLoginRouteHandler,
   registerRouteHandler,
   resetPasswordRouteHandler,
 } from "../../services/auth/index.js";
@@ -11,6 +12,12 @@ const router = express.Router();
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body.data.attributes;
   await loginRouteHandler(req, res, email, password);
+});
+
+router.post("/admin-login", async (req, res, next) => {
+  console.log("post called at /admin-login");
+  const { email, password } = req.body.data.attributes;
+  await adminLoginRouteHandler(req, res, email, password);
 });
 
 router.post("/logout", (req, res) => {

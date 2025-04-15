@@ -21,7 +21,7 @@ import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 
 // Authentication layout components
-import BasicLayoutLanding from "layouts/authentication/components/BasicLayoutLanding";
+import AdminLayoutLanding from "layouts/authentication/components/AdminLayoutLanding";
 
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
@@ -29,7 +29,7 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import AuthService from "services/auth-service";
 import { AuthContext } from "context";
 
-function Login() {
+function AdminDashboard() {
   const authContext = useContext(AuthContext);
 
   const [user, setUser] = useState({});
@@ -108,7 +108,7 @@ function Login() {
   };
 
   return (
-    <BasicLayoutLanding image={bgImage}>
+    <AdminLayoutLanding image={bgImage}>
       <Card>
         <MDBox
           variant="gradient"
@@ -221,8 +221,8 @@ function Login() {
           </MDBox>
         </MDBox>
       </Card>
-    </BasicLayoutLanding>
+    </AdminLayoutLanding>
   );
 }
 
-export default Login;
+export default AdminDashboard;

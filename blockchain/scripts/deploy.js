@@ -1,10 +1,10 @@
 const hre = require("hardhat");
 
 async function main() {
-    const AadhaarNFT = await hre.ethers.getContractFactory("AadhaarNFT");
+    const DocumentNFT = await hre.ethers.getContractFactory("DocumentNFT");
   
     // Deploy the contract
-    const contract = await AadhaarNFT.deploy();
+    const contract = await DocumentNFT.deploy();
   
     // Wait for deployment to finish
     await contract.waitForDeployment();
