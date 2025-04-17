@@ -13,5 +13,5 @@ export const getContract = async () => {
   await provider.send("eth_requestAccounts", []);
   const signer = await provider.getSigner();
   const contract = new ethers.Contract(CONTRACT_ADDRESS, DocumentNFT.abi, signer);
-  return contract;
+  return {contract, signer};
 };

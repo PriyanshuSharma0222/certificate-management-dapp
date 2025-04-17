@@ -11,15 +11,15 @@ class UserService {
     return await HttpService.get(endpoint);
   }
 
-  resetPassword = async (credentials) => {
+  storeRequestInfo = async (credentials) => {
     const resetPassword = 'password-reset';
     return await HttpService.post(resetPassword, credentials);
   }
 
-  updateProfile = async (newInfo) => {
-    const updateProfile = "me";
-    return await HttpService.patch(updateProfile, newInfo);
-  }
+  // updateProfile = async (newInfo) => {
+  //   const updateProfile = "me";
+  //   return await HttpService.patch(updateProfile, newInfo);
+  // }
 }
 
 export default new UserService();

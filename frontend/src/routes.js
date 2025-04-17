@@ -39,6 +39,7 @@ Coded by www.creative-tim.com
 import Dashboard from "layouts/dashboard";
 import AdminDashboard from "layouts/admin-dashboard";
 import Tables from "layouts/tables";
+import UserRequests from "layouts/user-requests";
 import Billing from "layouts/billing";
 import RTL from "layouts/rtl";
 import Notifications from "layouts/notifications";
@@ -99,7 +100,7 @@ const routes = [
     key: "tables",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/request-status",
-    component: <Tables />,
+    component: <UserRequests />,
   },
   {
     type: "examples",

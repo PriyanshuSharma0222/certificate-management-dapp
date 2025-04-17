@@ -88,10 +88,16 @@ const RequestForm = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (user.name.trim().length === 0) {
-      setErrors({ ...errors, nameError: true });
-      return;
-    }
+    // const res = await storeRequestData({
+    // user:user.email,
+    // data:{
+    //   name: docCred.name,
+    //   dob: docCred.dob,
+    //   gender: docCred.gender,
+    //   contact: docCred.contact,
+    //   address: docCred.address,
+    // }
+    // });
 
     const ipfsHash = await storeDocMetadata({
         name: docCred.name,
@@ -101,7 +107,10 @@ const RequestForm = () => {
         address: docCred.address,
     });
     
-    const contract = await getContract();
+    const {contract, signer} = await getContract();
+    const signerAddress = await signer.getAddress();
+    console.log("Request Form signer :", signerAddress);
+    
     const tx = await contract.requestDocument(
       docCred.name,
       docCred.dob,
@@ -110,6 +119,11 @@ const RequestForm = () => {
       docCred.address,
       `ipfs://${ipfsHash}`
     );
+
+    contract.on("DocumentRequested", (requestId, user) => {
+      console.log("New request from:", user, "with ID:", requestId);
+  });
+
     console.log( docCred.name,
         docCred.dob,
         docCred.gender,
