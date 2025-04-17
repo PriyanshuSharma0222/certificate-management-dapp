@@ -44,9 +44,6 @@ export default function data() {
   
   const loadRequests = async () => {
     const {contract, signer} = await getContract();
-    // const provider = new ethers.BrowserProvider(window.ethereum);
-    // await provider.send("eth_requestAccounts", []);
-    // const signer = await provider.getSigner();  
     console.log("Request Status Signer :", signer);
     
     const userAddress = await signer.getAddress();

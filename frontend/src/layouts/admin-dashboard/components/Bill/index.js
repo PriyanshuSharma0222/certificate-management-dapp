@@ -26,10 +26,33 @@ import MDButton from "components/MDButton";
 
 // Material Dashboard 2 React context
 import { useMaterialUIController } from "context";
-
-function Bill({ requestID, user, name, dob, gender, contact, addressDetails, ipfsHash, tokenId, noGutter }) {
+import { getContract } from "dapp/contract";
+function Bill({ requestID, user, name, dob, gender, contact, addressDetails, ipfsHash, tokenId, noGutter, loadRequests }) {
   const [controller] = useMaterialUIController();
   const { darkMode } = controller;
+
+  const approveHandler = async (requestID) => {
+    const {contract, signer} = await getContract();
+    const tokenURI = ipfsHash.replace("ipfs://", "https://gateway.lighthouse.storage/ipfs/")
+    console.log(requestID, tokenURI);
+    const tx = await contract.approveDocument(requestID, tokenURI);
+    console.log(tx);
+    
+    await tx.wait();
+
+    loadRequests();
+    alert("NFT Minted & Transfered to user");
+  }
+
+  const rejectHandler = async (requestID) => {
+    const {contract, signer} = await getContract();
+    const tx = await contract.rejectDocument(requestID);
+    await tx.wait();
+
+    loadRequests();
+    alert("Request Rejected");
+  }
+
 
   return (
     <MDBox
@@ -60,11 +83,11 @@ function Bill({ requestID, user, name, dob, gender, contact, addressDetails, ipf
 
           <MDBox display="flex" alignItems="center" mt={{ xs: 2, sm: 0 }} ml={{ xs: -1.5, sm: 0 }}>
             <MDBox mr={1}>
-              <MDButton variant="text" color="error">
+              <MDButton variant="text" color="error" onClick={()=>{rejectHandler(requestID)}}>
                 <Icon>delete</Icon>&nbsp;reject
               </MDButton>
             </MDBox>
-            <MDButton variant="text" color={darkMode ? "white" : "dark"}>
+            <MDButton variant="text" color={darkMode ? "white" : "dark"} onClick={()=>{approveHandler(requestID)}}>
               <Icon>edit</Icon>&nbsp;approve
             </MDButton>
           </MDBox>

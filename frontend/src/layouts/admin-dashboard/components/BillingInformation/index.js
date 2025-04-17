@@ -74,7 +74,7 @@ function BillingInformation() {
     <Card id="delete-account">
       <MDBox pt={3} px={2}  width="100vw">
         <MDTypography variant="h6" fontWeight="medium">
-          Billing Information
+          Pending Requests
         </MDTypography>
       </MDBox>
       <MDBox pt={1} pb={2} px={2} width="100%">
@@ -82,7 +82,7 @@ function BillingInformation() {
           {requests.map((request, index) => (
             <Bill
               key = {index}
-              requestId = {request.requestId}
+              requestID = {request.requestId}
               user = {request.user}
               name = {request.name}
               dob = {request.dob}
@@ -91,6 +91,7 @@ function BillingInformation() {
               addressDetails = {request.addressDetails}
               ipfsHash = {request.ipfsHash}
               tokenId = {request.tokenId}
+              loadRequests = {loadRequests}
             />
           ))}
         </MDBox>
