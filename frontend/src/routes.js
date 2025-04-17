@@ -38,6 +38,7 @@ Coded by www.creative-tim.com
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
 import AdminDashboard from "layouts/admin-dashboard";
+import RequestHistory from "layouts/request-history";
 import Tables from "layouts/tables";
 import UserRequests from "layouts/user-requests";
 import Billing from "layouts/billing";
@@ -47,7 +48,7 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import RequestForm from "components/RequestForm.js";
-import AadhaarViewer from "components/Response.js";
+import DocumentViewer from "components/DocumentViewer.js";
 import RequestDocument from "components/RequestDocument.js";
 
 import UserProfile from "layouts/user-profile";
@@ -68,7 +69,7 @@ const routes = [
     key: "documents",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/documents",
-    component: <AadhaarViewer />,
+    component: <DocumentViewer />,
   },
   {
     type: "collapse",
@@ -93,6 +94,14 @@ const routes = [
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/admin-dashboard",
     component: <AdminDashboard />,
+  },
+  {
+    type: "examples",
+    name: "Request History",
+    key: "request-history",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/request-history",
+    component: <RequestHistory />,
   },
   {
     type: "collapse",

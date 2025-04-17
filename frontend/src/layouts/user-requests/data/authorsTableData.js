@@ -94,7 +94,7 @@ export default function data() {
         ),
         status: (
           <MDBox ml={-1}>
-            <MDBadge badgeContent={statusEnum[res[7]]} color="{statusColor[statusEnum[res[7]]]}" variant="gradient" size="sm" />
+            <MDBadge badgeContent={statusEnum[res[7]]} color={statusColor[statusEnum[res[7]]]} variant="gradient" size="sm" />
           </MDBox>
         ),
       },);

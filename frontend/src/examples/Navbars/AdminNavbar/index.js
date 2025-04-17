@@ -117,22 +117,16 @@ function DefaultNavbar({ transparent, light, action }) {
         </MDBox>
         {authContext.isAuthenticated && (
           <MDBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
-            <DefaultNavbarLink 
-              icon="person" 
-              name="profile" 
-              route="/profile" 
-              light={light} 
-            />
             <DefaultNavbarLink
               icon="donut_large"
               name="requests"
-              route="/dashboard"
+              route="/admin-dashboard"
               light={light}
             />
             <DefaultNavbarLink
               icon="account_circle"
               name="history"
-              route="/auth/register"
+              route="/request-history"
               light={light}
             />
             <DefaultNavbarLink
