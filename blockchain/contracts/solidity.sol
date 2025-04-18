@@ -11,6 +11,7 @@ contract DocumentNFT is ERC721URIStorage, Ownable {
 
     struct DocumentRequest {
         address user;
+        string docType;
         string name;
         string dob;
         string gender;
@@ -34,6 +35,7 @@ contract DocumentNFT is ERC721URIStorage, Ownable {
 
     /// Called by users via React app
     function requestDocument(
+        string memory _docType,
         string memory _name,
         string memory _dob,
         string memory _gender,
@@ -41,9 +43,23 @@ contract DocumentNFT is ERC721URIStorage, Ownable {
         string memory _addressDetails,
         string memory _ipfsHash
     ) public {
+        uint256[] memory userReqs = userRequests[msg.sender];
+        for (uint256 i = 0; i < userReqs.length; i++) {
+            uint256 id = userReqs[i];
+            DocumentRequest storage existingReq = requests[id];
+            if (
+                existingReq.status == RequestStatus.Pending &&
+                keccak256(abi.encodePacked(existingReq.docType)) == keccak256(abi.encodePacked(_docType))
+            ) {
+                existingReq.status = RequestStatus.Rejected;
+                emit DocumentRejected(id);
+            }
+        }
+
         uint256 requestId = tokenCounter++;
         DocumentRequest storage req = requests[requestId];
         req.user = msg.sender;
+        req.docType = _docType;
         req.name = _name;
         req.dob = _dob;
         req.gender = _gender;
@@ -62,6 +78,21 @@ contract DocumentNFT is ERC721URIStorage, Ownable {
     function approveDocument(uint256 _requestId, string memory _tokenURI) public onlyOwner {
         DocumentRequest storage req = requests[_requestId];
         require(req.status == RequestStatus.Pending, "Already processed");
+
+        // Reject previous approved document of same docType
+        uint256[] memory userReqs = userRequests[req.user];
+        for (uint256 i = 0; i < userReqs.length; i++) {
+            uint256 id = userReqs[i];
+            if (id == _requestId) continue; // skip current request
+            DocumentRequest storage existingReq = requests[id];
+            if (
+                (existingReq.status == RequestStatus.Approved || existingReq.status == RequestStatus.Pending) &&
+                keccak256(abi.encodePacked(existingReq.docType)) == keccak256(abi.encodePacked(req.docType))
+            ) {
+                existingReq.status = RequestStatus.Rejected;
+                emit DocumentRejected(id);
+            }
+        }
 
         uint256 newTokenId = _requestId;
         _safeMint(req.user, newTokenId);
@@ -90,11 +121,12 @@ contract DocumentNFT is ERC721URIStorage, Ownable {
 
     /// Returns request details
     function getRequestDetails(uint256 requestId) public view returns (
-        address, string memory, string memory, string memory, string memory, string memory, string memory, RequestStatus, uint256
+        address, string memory, string memory, string memory, string memory, string memory, string memory, string memory, RequestStatus, uint256
     ) {
         DocumentRequest memory r = requests[requestId];
         return (
             r.user,
+            r.docType,
             r.name,
             r.dob,
             r.gender,

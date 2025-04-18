@@ -60,14 +60,15 @@ function DocumentViewer() {
           return {
             requestId: id,
             user: data[0],
-            name: data[1],
-            dob: data[2],
-            gender: data[3],
-            contact: data[4],
-            addressDetails: data[5],
-            ipfsHash: data[6],
-            status: data[7],
-            tokenId: data[8],
+            docType: data[1],
+            name: data[2],
+            dob: data[3],
+            gender: data[4],
+            contact: data[5],
+            addressDetails: data[6],
+            ipfsHash: data[7],
+            status: data[8],
+            tokenId: data[9],
           };
         })
       );
@@ -90,7 +91,7 @@ function DocumentViewer() {
                 <DocumentCard
                   color="info"
                   icon="description"
-                  title="Aadhaar"
+                  title={request.docType}
                   name={request.name}
                   dob={request.dob}
                   gender={request.gender}

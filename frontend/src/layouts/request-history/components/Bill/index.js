@@ -28,7 +28,7 @@ import MDBadge from "components/MDBadge";
 // Material Dashboard 2 React context
 import { useMaterialUIController } from "context";
 import { getContract } from "dapp/contract";
-function Bill({ requestID, user, name, dob, gender, contact, addressDetails, ipfsHash, status, tokenId, noGutter }) {
+function Bill({ requestID, user, docType, name, dob, gender, contact, addressDetails, ipfsHash, status, tokenId, noGutter }) {
   const [controller] = useMaterialUIController();
   const { darkMode } = controller;
   const statusEnum = ["Pending", "Approved", "Rejected"];
@@ -61,7 +61,7 @@ function Bill({ requestID, user, name, dob, gender, contact, addressDetails, ipf
           width="100%"
         >
           <MDTypography variant="button" fontWeight="medium" textTransform="capitalize">
-            Aadhaar
+            {docType}
           </MDTypography>
 
           <MDBox display="flex" alignItems="center" mt={{ xs: 2, sm: 0 }} ml={{ xs: -1.5, sm: 0 }}>

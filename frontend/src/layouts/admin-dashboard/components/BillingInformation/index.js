@@ -47,17 +47,18 @@ function BillingInformation() {
       console.log(requestDetails);
       
       const user = requestDetails[0];
-      const name = requestDetails[1];
-      const dob = requestDetails[2];
-      const gender = requestDetails[3];
-      const contact = requestDetails[4];
-      const addressDetails = requestDetails[5];
-      const ipfsHash = requestDetails[6];
-      const status = requestDetails[7];
-      const tokenId = requestDetails[8];
-
+      const docType = requestDetails[1];
+      const name = requestDetails[2];
+      const dob = requestDetails[3];
+      const gender = requestDetails[4];
+      const contact = requestDetails[5];
+      const addressDetails = requestDetails[6];
+      const ipfsHash = requestDetails[7];
+      const status = requestDetails[8];
+      const tokenId = requestDetails[9];
+      
       if (status == 0) {
-        allRequests.push({ requestId: i, user, name, dob, gender, contact, addressDetails, ipfsHash, status, tokenId});
+        allRequests.push({ requestId: i, user, docType, name, dob, gender, contact, addressDetails, ipfsHash, status, tokenId});
       }
     }
 
@@ -84,6 +85,7 @@ function BillingInformation() {
               key = {index}
               requestID = {request.requestId}
               user = {request.user}
+              docType = {request.docType}
               name = {request.name}
               dob = {request.dob}
               gender = {request.gender}

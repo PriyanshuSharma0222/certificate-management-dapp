@@ -26,12 +26,7 @@ import AuthService from "../services/auth-service";
 const RequestForm = () => {
   const [isDemo, setIsDemo] = useState(false);
   const [notification, setNotification] = useState(false);
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
+  const [requestsData, setRequestsData] = useState([]);
 
   const [errors, setErrors] = useState({
     nameError: false,
@@ -41,24 +36,11 @@ const RequestForm = () => {
     contactError: false,
   });
 
-  const getUserData = async () => {
-    const response = await AuthService.getProfile();
-    if (response.data.id == 1) {
-      setIsDemo(process.env.REACT_APP_IS_DEMO === "true");
-    }
-    setUser((prevUser) => ({
-      ...prevUser,
-      ...response.data.attributes,
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    }));
-  };
-
   const path = window.location.pathname;
   const docName = path.substring(path.lastIndexOf('/')+1);
 
   const [docCred, setDocCred] = useState({
+    docType: docName,
     name: "",
     dob: "",
     gender: "",
@@ -66,9 +48,40 @@ const RequestForm = () => {
     contact: "",
   });
 
-  useEffect(() => {
-    getUserData();
-  }, []);
+  const loadRequests = async () => {
+    const {contract, signer} = await getContract();
+    console.log("Request Status Signer :", signer);
+    
+    const userAddress = await signer.getAddress();
+    console.log(userAddress);
+    
+    const requestIDs = await contract.getUserRequests(userAddress);
+    console.log(requestIDs);
+    
+    const all = [];
+
+    for (let id of requestIDs) {
+      const res = await contract.getRequestDetails(id);
+      console.log("Request Details :", id, res);
+      
+      const statusEnum = ["Pending", "Approved", "Rejected"];
+      const request = {
+        requestId: id,
+        docType: res[1],
+        name: res[2],
+        dob: res[3],
+        gender: res[4],
+        contact: res[5],
+        addressDetails: res[6],
+        ipfsHash: res[7],
+        status: res[8],
+        tokenId: res[9],
+      };
+      console.log(request);
+      all.push(request);
+    }
+    setRequestsData(all);
+  } 
 
   useEffect(() => {
     if (notification === true) {
@@ -88,18 +101,53 @@ const RequestForm = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    // const res = await storeRequestData({
-    // user:user.email,
-    // data:{
-    //   name: docCred.name,
-    //   dob: docCred.dob,
-    //   gender: docCred.gender,
-    //   contact: docCred.contact,
-    //   address: docCred.address,
-    // }
-    // });
+    const err = {
+      nameError: false,
+      dobError: false,
+      genderError: false,
+      addressError: false,
+      contactError: false,
+    };
+  
+    let hasError = false;
+  
+    if (!docCred.name || docCred.name.trim().length < 3) {
+      err.nameError = true;
+      hasError = true;
+    }
+  
+    const dobRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+    if (!docCred.dob || !dobRegex.test(docCred.dob)) {
+      err.dobError = true;
+      hasError = true;
+    }
+  
+    const validGenders = ["Male", "Female"];
+    if (!docCred.gender || !validGenders.includes(docCred.gender)) {
+      err.genderError = true;
+      hasError = true;
+    }
+  
+    if (!docCred.address || docCred.address.trim().length < 3) {
+      err.addressError = true;
+      hasError = true;
+    }
+  
+    const contactRegex = /^[6-9]\d{9}$/;
+    if (!docCred.contact || !contactRegex.test(docCred.contact)) {
+      err.contactError = true;
+      hasError = true;
+    }
+    
+    setErrors(err);
+    if(hasError){
+      return;
+    }
+
+
 
     const ipfsHash = await storeDocMetadata({
+        docType: docName,
         name: docCred.name,
         dob: docCred.dob,
         gender: docCred.gender,
@@ -112,6 +160,7 @@ const RequestForm = () => {
     console.log("Request Form signer :", signerAddress);
     
     const tx = await contract.requestDocument(
+      docName,
       docCred.name,
       docCred.dob,
       docCred.gender,
@@ -119,19 +168,8 @@ const RequestForm = () => {
       docCred.address,
       `ipfs://${ipfsHash}`
     );
-
-    contract.on("DocumentRequested", (requestId, user) => {
-      console.log("New request from:", user, "with ID:", requestId);
-  });
-
-    console.log( docCred.name,
-        docCred.dob,
-        docCred.gender,
-        docCred.contact,
-        docCred.address,
-        ipfsHash);
+    
     await tx.wait();
-    localStorage.setItem('cid', ipfsHash);
 
     console.log("Request submitted!");
 
@@ -182,12 +220,13 @@ const RequestForm = () => {
                   fullWidth
                   name="name"
                   value={docCred.name}
+                  placeholder="Name"
                   onChange={changeHandler}
                   error={errors.nameError}
                 />
                 {errors.nameError && (
                   <MDTypography variant="caption" color="error" fontWeight="light">
-                    The name can not be null
+                    Name must have atleast 3 letters
                   </MDTypography>
                 )}
               </MDBox>
@@ -215,7 +254,7 @@ const RequestForm = () => {
                 />
                 {errors.dobError && (
                   <MDTypography variant="caption" color="error" fontWeight="light">
-                    The DOB must be valid
+                    Enter a valid Date of Birth DD/MM/YYYY
                   </MDTypography>
                 )}
               </MDBox>
@@ -247,7 +286,7 @@ const RequestForm = () => {
                   />
                   {errors.genderError && (
                     <MDTypography variant="caption" color="error" fontWeight="light">
-                      Invalid
+                      Either Male or Female
                     </MDTypography>
                   )}
                 </MDBox>
@@ -267,7 +306,7 @@ const RequestForm = () => {
                     type="contact"
                     fullWidth
                     name="contact"
-                    placeholder="enter 10 digits"
+                    placeholder="Enter 10 digits"
                     value={docCred.contact}
                     onChange={changeHandler}
                     error={errors.contactError}
@@ -275,7 +314,7 @@ const RequestForm = () => {
                   />
                   {errors.contactError && (
                     <MDTypography variant="caption" color="error" fontWeight="light">
-                      Invalid
+                      Invalid Contact Number
                     </MDTypography>
                   )}
                 </MDBox>
@@ -300,15 +339,15 @@ const RequestForm = () => {
                     type="address"
                     fullWidth
                     name="address"
-                    placeholder=""
+                    placeholder="Address"
                     value={docCred.address}
                     onChange={changeHandler}
                     error={errors.addressError}
                     disabled={isDemo}
                   />
-                  {errors.genderError && (
+                  {errors.addressError && (
                     <MDTypography variant="caption" color="error" fontWeight="light">
-                      Invalid
+                      Address too short
                     </MDTypography>
                   )}
                 </MDBox>

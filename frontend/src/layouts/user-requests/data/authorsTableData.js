@@ -62,14 +62,15 @@ export default function data() {
       const statusEnum = ["Pending", "Approved", "Rejected"];
       const request = {
         requestId: id,
-        name: res[1],
-        dob: res[2],
-        gender: res[3],
-        contact: res[4],
-        addressDetails: res[5],
-        ipfsHash: res[6],
-        status: statusEnum[res[7]],
-        tokenId: res[8],
+        docType: res[1],
+        name: res[2],
+        dob: res[3],
+        gender: res[4],
+        contact: res[5],
+        addressDetails: res[6],
+        ipfsHash: res[7],
+        status: statusEnum[res[8]],
+        tokenId: res[9],
       };
       console.log(request);
       
@@ -89,12 +90,12 @@ export default function data() {
         ),
         ipfs: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            {res[6]}
+            {res[7]}
           </MDTypography>
         ),
         status: (
           <MDBox ml={-1}>
-            <MDBadge badgeContent={statusEnum[res[7]]} color={statusColor[statusEnum[res[7]]]} variant="gradient" size="sm" />
+            <MDBadge badgeContent={statusEnum[res[8]]} color={statusColor[statusEnum[res[8]]]} variant="gradient" size="sm" />
           </MDBox>
         ),
       },);
